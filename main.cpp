@@ -7,6 +7,7 @@ using namespace std;
 
 class rocket{
 public:
+    string status;
     int time;
     double accelaration;
     double fuel;
@@ -17,10 +18,10 @@ public:
     double target_height;
 
     void rocket_choice(int payload){
-        if(payload<50){
+        if(payload<=50){
             vehicle = "Falcon 9";
         }
-        else if(payload>25 && payload<75){
+        else if(payload>50 && payload<75){
             vehicle = "Falcon Heavy";
         }
         else{
@@ -30,12 +31,15 @@ public:
     
     void launch(int time){
         if(fuel<=0){
-            cout << endl << "Fuel Over" << endl << "CRAAAAAASH!!!!" << endl;
-            
+            cout << endl << "Fuel Over" << endl << "CRAAAAAASH!!!!" << "Mission Unsuccessful!!" << endl;
+            exit(0);
         }
-        velocity += accelaration*time;
-        altitude = 0.5*accelaration*pow(velocity,2);
+        velocity = accelaration*time;
+        altitude = 0.5*accelaration*pow(time,2);
         cout << endl << "Time: " << time << endl;
+
+
+        
         cout << "Fuel Left: " << fuel << endl;
         cout << "Altitude: " << altitude << endl;
         cout << "Velocity: " << velocity << endl;
@@ -52,7 +56,7 @@ int main(){
     cout << "Wellcome to Space Exploration Technologies Ltd." << endl ;
     cout << "Press 1 to start" << endl;
     cin >> choice;
-    user1.fuel = 1000;
+    user1.fuel = 100;
     
     cout << "Enter your payload in tonnes(25 to 100 tonnes): ";
     cin >> user1.payload;
@@ -102,16 +106,24 @@ int main(){
     user1.time=0;
     user1.accelaration = 2;
     user1.velocity=0;
+    user1.altitude=0;
     
 
-    for(user1.time=0; user1.altitude<user1.target_height; user1.time+=10)
+    for(user1.time=10; user1.altitude<user1.target_height; user1.time+=10)
     {
         user1.launch(user1.time);
         cout << endl << flush;
         this_thread::sleep_for(chrono::milliseconds(1500));
     }
     
-    cout << "CONGRATS!!!" << endl;
-    cout << "Destination reached" << endl;
+    if(user1.altitude>=user1.target_height){
+        user1.status = "Congrats!! Mission successful";
+    }
+    for(int j=0; j<user1.status.size(); j++)
+    {
+        
+        cout << user1.status[j] << flush;
+        this_thread::sleep_for(chrono::milliseconds(100));
+    }
     return 0;
 }
